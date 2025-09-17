@@ -30,7 +30,11 @@ body {
     }
     
     .login-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.2rem !important;
+    }
+    
+    .login-header p:first-of-type {
+        font-size: 0.65rem !important;
     }
     
     .login-logo {
@@ -48,7 +52,11 @@ body {
     }
     
     .login-header h1 {
-        font-size: 1.6rem;
+        font-size: 1.1rem !important;
+    }
+    
+    .login-header p:first-of-type {
+        font-size: 0.6rem !important;
     }
     
     .login-logo {
@@ -87,14 +95,21 @@ body {
 
 .login-header h1 {
     color: #333;
-    font-size: 2rem;
+    font-size: 1.4rem !important;
     margin-bottom: 10px;
     font-weight: 500;
 }
 
 .login-header p {
     color: #666;
-    font-size: 1rem;
+    font-size: 0.8rem !important;
+    margin-bottom: 5px;
+}
+
+.login-header p:first-of-type {
+    font-size: 0.7rem !important;
+    color: #888;
+    margin-bottom: 8px;
 }
 
 .error-message {

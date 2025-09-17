@@ -56,9 +56,6 @@ function generateDashboardHTML($campusKey, $campusData) {
                 <button class="sidebar-toggle" id="sidebarToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-                <button class="sidebar-toggle-desktop" id="sidebarToggleDesktop">
-                    <i class="fas fa-bars"></i>
-                </button>
                 <h1><?php echo sanitizeOutput($campus['name']); ?></h1>
                 <div class="user-info">
                     <span class="last-update">Last updated: <?php echo getCurrentTimestamp(); ?></span>

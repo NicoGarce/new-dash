@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Campus Dashboard</title>
+    <title>Login - JONELTA Dashboard</title>
     <link rel="stylesheet" href="css/login.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-box">
             <div class="login-header">
                 <img src="img/SS.png" alt="JONELTA Logo" class="login-logo">
-                <h1>Campus Dashboard</h1>
+                <p>UNIVERSITY OF PERPETUAL HELP SYSTEM JONELTA</p>
+                <h1>Management Dashboard</h1>
                 <p>Sign in to access the dashboard</p>
             </div>
             

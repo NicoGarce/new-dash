@@ -317,17 +317,7 @@ function initSimpleSidebarToggle() {
         });
     }
     
-    // Handle desktop toggle button
-    if (sidebarToggleDesktop && sidebar && sidebarOverlay) {
-        sidebarToggleDesktop.addEventListener('click', function(e) {
-            e.preventDefault();
-            sidebar.classList.toggle('collapsed');
-            // Update main content padding
-            if (window.dataManager) {
-                window.dataManager.updateMainContentPadding();
-            }
-        });
-    }
+    // Desktop toggle functionality removed - sidebar is always visible on desktop
     
     // Handle sidebar overlay click (mobile/tablet)
     if (sidebarOverlay) {

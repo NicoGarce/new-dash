@@ -703,16 +703,7 @@ body:has(.sidebar.collapsed) .main-content {
     }
     
     .sidebar-toggle-desktop {
-        display: inline-block !important;
-        background: #204ca4;
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1.1em;
-        transition: all 0.3s ease;
-        margin-right: 15px;
+        display: none !important;
     }
     
     .sidebar-toggle {
