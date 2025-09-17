@@ -89,10 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Sign In
                 </button>
             </form>
-            
+            <!--
             <div class="login-footer">
                 <p>Default credentials: admin / admin123</p>
             </div>
+            -->
         </div>
     </div>
 </body>
