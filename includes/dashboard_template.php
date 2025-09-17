@@ -1,80 +1,54 @@
+<?php
+/**
+ * Dashboard Template
+ * This template can be used to generate dashboard pages with data from config
+ */
+
+function generateDashboardHTML($campusKey, $campusData) {
+    $campus = $campusData[$campusKey];
+    $isAllCampuses = ($campusKey === 'all_campuses');
+    
+    ob_start();
+    ?>
     <!DOCTYPE html>
     <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GMA CAVITE Dashboard</title>
+        <title><?php echo htmlspecialchars($campus['name']); ?> Dashboard</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="../js/data_manager.js"></script>
-        <link rel="stylesheet" href="../css/style.css">
+        <script src="<?php echo $isAllCampuses ? 'js/data_manager.js' : '../js/data_manager.js'; ?>"></script>
+        <link rel="stylesheet" href="<?php echo $isAllCampuses ? 'css/style.css' : '../css/style.css'; ?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
-        <div class="sidebar">
-    <h2>CAMPUSES</h2>
-    <ul class="nav-list">
-        <li>
-            <a href="../dashboard.php">
-                <i class="fas fa-chart-bar"></i>
-                <span>JONELTA</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/binan.php" class="">
-                <i class="fas fa-university"></i>
-                <span>BIÑAN</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/gma_cavite.php" class="">
-                <i class="fas fa-university"></i>
-                <span>GMA CAVITE</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/manila.php" class="">
-                <i class="fas fa-university"></i>
-                <span>MANILA</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/pangasinan.php" class="">
-                <i class="fas fa-university"></i>
-                <span>PANGASINAN</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/isabela.php" class="">
-                <i class="fas fa-university"></i>
-                <span>ISABELA</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/roxas.php" class="">
-                <i class="fas fa-university"></i>
-                <span>ROXAS</span>
-            </a>
-        </li>
-        <li>
-            <a href="../campuses/med-university.php" class="">
-                <i class="fas fa-university"></i>
-                <span>MEDICAL UNIVERSITY</span>
-            </a>
-        </li>
-    </ul>
-</div>        <div class="main-content">
+        <?php 
+        if ($isAllCampuses) {
+            include 'sidebar/dash_sidebar.php';
+        } else {
+            // For campus pages, use absolute path from project root
+            $sidebarPath = __DIR__ . '/../sidebar/sidebar.php';
+            if (file_exists($sidebarPath)) {
+                include $sidebarPath;
+            } else {
+                // Fallback to relative path
+                include '../sidebar/sidebar.php';
+            }
+        }
+        ?>
+        <div class="main-content">
             <div class="header-section">
-                <h1>GMA CAVITE</h1>
+                <h1><?php echo htmlspecialchars($campus['name']); ?></h1>
                 <div class="user-info">
-                    <span class="last-update">Last updated: 2025-09-17 01:52:21</span>
+                    <span class="last-update">Last updated: <?php echo date('Y-m-d H:i:s'); ?></span>
                     <button class="refresh-btn" onclick="dataManager.refresh()" title="Refresh Data">
                         <i class="fas fa-sync-alt"></i>
                     </button>
-                    <span>Welcome, User</span>
-                    <a href="../logout.php" class="logout-btn">
+                    <span>Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?></span>
+                    <a href="<?php echo $isAllCampuses ? 'logout.php' : '../logout.php'; ?>" class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
                     </a>
@@ -92,13 +66,13 @@
                         <div class="column-summary">
                             <div class="column-summary-card">
                                 <h4>SUMMARY</h4>
-                                <h5>NEW ENROLLEES SEPTEMBER S.Y. 2025-2026</h4>
-                            <div class="big-number enrollment-current">380</div>
+                                <h5><?php echo $isAllCampuses ? 'GRAND TOTAL ENROLLEES AS OF SEPTEMBER S.Y. 2025-2026' : 'NEW ENROLLEES SEPTEMBER S.Y. 2025-2026'; ?></h4>
+                            <div class="big-number enrollment-current"><?php echo formatNumber($campus['enrollment']['current_year']); ?></div>
                         </div>
                         <div class="column-summary-card">
-                            <h4>SUMMARY PREV S.Y.</h4>
-                            <h5>NEW ENROLLEES SEPTEMBER S.Y. 2024-2025</h5>
-                            <div class="big-number enrollment-previous">360</div>
+                            <h4><?php echo $isAllCampuses ? 'SUMMARY PREV S.Y.' : 'SUMMARY PREV S.Y.'; ?></h4>
+                            <h5><?php echo $isAllCampuses ? 'GRAND TOTAL ENROLLEES S.Y. 2024-2025' : 'NEW ENROLLEES SEPTEMBER S.Y. 2024-2025'; ?></h5>
+                            <div class="big-number enrollment-previous"><?php echo formatNumber($campus['enrollment']['previous_year']); ?></div>
                             </div>
                         </div>
                         <div class="column-chart">
@@ -117,12 +91,12 @@
                             <div class="column-summary-card">
                                 <h4>COLLECTION SUMMARY</h4>
                                 <h5>TOTAL COLLECTION S.Y. 2025-2026</h5>
-                            <div class="big-number collection-current">₱38,000,000</div>
+                            <div class="big-number collection-current"><?php echo formatCurrency($campus['collection']['current_year']); ?></div>
                         </div>
                         <div class="column-summary-card">
                             <h4>COLLECTION PREV S.Y.</h4>
                             <h5>TOTAL COLLECTION S.Y. 2024-2025</h5>
-                            <div class="big-number collection-previous">₱36,000,000</div>
+                            <div class="big-number collection-previous"><?php echo formatCurrency($campus['collection']['previous_year']); ?></div>
                             </div>
                         </div>
                         <div class="column-chart">
@@ -141,12 +115,12 @@
                             <div class="column-summary-card">
                                 <h4>ACCOUNTS PAYABLE SUMMARY</h4>
                                 <h5>TOTAL OUTSTANDING PAYABLES S.Y. 2025-2026</h5>
-                            <div class="big-number payables-current">₱7,200,000</div>
+                            <div class="big-number payables-current"><?php echo formatCurrency($campus['accounts_payable']['current_year']); ?></div>
                         </div>
                         <div class="column-summary-card">
                             <h4>PAYABLES PREV S.Y.</h4>
                             <h5>TOTAL OUTSTANDING PAYABLES S.Y. 2024-2025</h5>
-                            <div class="big-number payables-previous">₱6,800,000</div>
+                            <div class="big-number payables-previous"><?php echo formatCurrency($campus['accounts_payable']['previous_year']); ?></div>
                             </div>
                         </div>
                         <div class="column-chart">
@@ -170,19 +144,19 @@
 
         <script>
             // Data from PHP
-            const campusData = {"name":"GMA CAVITE","enrollment":{"current_year":380,"previous_year":360,"per_sy":[330,350,370,360,380],"per_college":{"CAS":38,"CBA":32,"CCS":35,"CEA":30,"CHM":24,"CME":21,"COED":26,"CRM":14,"GRAD":11,"LAW":16,"SOA":14}},"collection":{"current_year":38000000,"previous_year":36000000,"monthly":[2800000,3200000,3500000,3300000,3600000,3400000,3200000,3500000,3800000,3600000,3200000,2900000]},"accounts_payable":{"current_year":7200000,"previous_year":6800000,"by_category":{"Supplies":2000000,"Utilities":1500000,"Maintenance":1300000,"Equipment":1000000,"Services":800000,"Other":400000}}};
-            const isAllCampuses = false;
-            const currentCampus = 'gma_cavite';
+            const campusData = <?php echo json_encode($campus); ?>;
+            const isAllCampuses = <?php echo $isAllCampuses ? 'true' : 'false'; ?>;
+            const currentCampus = '<?php echo $campusKey; ?>';
 
             // Enrollment Chart
             const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
             const enrollmentChart = new Chart(enrollmentCtx, {
                 type: 'bar',
                 data: {
-                    labels: ["CAS","CBA","CCS","CEA","CHM","CME","COED","CRM","GRAD","LAW","SOA"],
+                    labels: <?php echo $isAllCampuses ? json_encode(array_keys($campus['enrollment']['per_campus'])) : json_encode(array_keys($campus['enrollment']['per_college'])); ?>,
                     datasets: [{
                         label: 'Enrollees',
-                        data: [38,32,35,30,24,21,26,14,11,16,14],
+                        data: <?php echo $isAllCampuses ? json_encode(array_values($campus['enrollment']['per_campus'])) : json_encode(array_values($campus['enrollment']['per_college'])); ?>,
                         backgroundColor: '#204ca4',
                         borderColor: '#204ca4',
                         borderWidth: 0,
@@ -232,23 +206,24 @@
             // Collection Chart
             const collectionCtx = document.getElementById('collectionChart').getContext('2d');
             const collectionChart = new Chart(collectionCtx, {
-                type: 'line',
+                type: <?php echo $isAllCampuses ? "'bar'" : "'line'"; ?>,
                 data: {
-                    labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
+                    labels: <?php echo $isAllCampuses ? json_encode(array_keys($campus['collection']['per_campus'])) : json_encode(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']); ?>,
                     datasets: [{
                         label: 'Collection (₱)',
-                        data: [2800000,3200000,3500000,3300000,3600000,3400000,3200000,3500000,3800000,3600000,3200000,2900000],
-                        backgroundColor: 'rgba(32, 76, 164, 0.1)',
+                        data: <?php echo $isAllCampuses ? json_encode(array_values($campus['collection']['per_campus'])) : json_encode($campus['collection']['monthly']); ?>,
+                        backgroundColor: <?php echo $isAllCampuses ? "'#204ca4'" : "'rgba(32, 76, 164, 0.1)'"; ?>,
                         borderColor: '#204ca4',
-                        borderWidth: 3,
-                        borderRadius: 0,
-                        borderSkipped: true,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#204ca4',
-                        pointBorderColor: '#204ca4',
-                        pointRadius: 4,
-                        pointHoverRadius: 6                    }]
+                        borderWidth: <?php echo $isAllCampuses ? '0' : '3'; ?>,
+                        borderRadius: <?php echo $isAllCampuses ? '8' : '0'; ?>,
+                        borderSkipped: <?php echo $isAllCampuses ? 'false' : 'true'; ?>,
+                        fill: <?php echo $isAllCampuses ? 'false' : 'true'; ?>,
+                        tension: <?php echo $isAllCampuses ? '0' : '0.4'; ?>,
+                        pointBackgroundColor: <?php echo $isAllCampuses ? 'null' : "'#204ca4'"; ?>,
+                        pointBorderColor: <?php echo $isAllCampuses ? 'null' : "'#204ca4'"; ?>,
+                        pointRadius: <?php echo $isAllCampuses ? '0' : '4'; ?>,
+                        pointHoverRadius: <?php echo $isAllCampuses ? '0' : '6'; ?>
+                    }]
                 },
                 options: {
                     responsive: true,
@@ -292,32 +267,61 @@
             // Accounts Payable Chart
             const accountsPayableCtx = document.getElementById('accountsPayableChart').getContext('2d');
             const accountsPayableChart = new Chart(accountsPayableCtx, {
-                type: 'doughnut',
+                type: <?php echo $isAllCampuses ? "'bar'" : "'doughnut'"; ?>,
                 data: {
-                    labels: ["Supplies","Utilities","Maintenance","Equipment","Services","Other"],
+                    labels: <?php echo $isAllCampuses ? json_encode(array_keys($campus['accounts_payable']['per_campus'])) : json_encode(array_keys($campus['accounts_payable']['by_category'])); ?>,
                     datasets: [{
                         label: 'Outstanding Payables (₱)',
-                        data: [2000000,1500000,1300000,1000000,800000,400000],
-                        backgroundColor: ["#204ca4","#3b82f6","#60a5fa","#93c5fd","#bfdbfe","#dbeafe"],
-                        borderColor: null,
-                        borderWidth: 0,
-                        borderRadius: 0,
-                        borderSkipped: true                    }]
+                        data: <?php echo $isAllCampuses ? json_encode(array_values($campus['accounts_payable']['per_campus'])) : json_encode(array_values($campus['accounts_payable']['by_category'])); ?>,
+                        backgroundColor: <?php echo $isAllCampuses ? "'#204ca4'" : json_encode(['#204ca4', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe']); ?>,
+                        borderColor: <?php echo $isAllCampuses ? "'#204ca4'" : 'null'; ?>,
+                        borderWidth: <?php echo $isAllCampuses ? '0' : '0'; ?>,
+                        borderRadius: <?php echo $isAllCampuses ? '8' : '0'; ?>,
+                        borderSkipped: <?php echo $isAllCampuses ? 'false' : 'true'; ?>
+                    }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    scales: null,
-                    plugins: {
-                        legend: {
-                            display: true,
-                            position: 'bottom',
-                            labels: {
+                    scales: <?php echo $isAllCampuses ? '{
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: "#f3f4f6"
+                            },
+                            ticks: {
+                                callback: function(value) {
+                                    return "₱" + (value / 1000000).toFixed(0) + "M";
+                                },
                                 color: "#6b7280",
                                 font: {
                                     size: 10
                                 }
-                            }                        }
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: "#6b7280",
+                                font: {
+                                    size: 9
+                                }
+                            }
+                        }
+                    }' : 'null'; ?>,
+                    plugins: {
+                        legend: {
+                            display: <?php echo $isAllCampuses ? 'false' : 'true'; ?>,
+                            position: <?php echo $isAllCampuses ? 'null' : "'bottom'"; ?>,
+                            labels: <?php echo $isAllCampuses ? 'null' : '{
+                                color: "#6b7280",
+                                font: {
+                                    size: 10
+                                }
+                            }'; ?>
+                        }
                     }
                 }
             });
@@ -332,4 +336,7 @@
         </script>
     </body>
     </html>
-    
+    <?php
+    return ob_get_clean();
+}
+?>

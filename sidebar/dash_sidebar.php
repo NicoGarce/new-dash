@@ -1,44 +1,52 @@
 <div class="sidebar">
-    <h2>Campuses</h2>
+    <h2>CAMPUSES</h2>
     <ul class="nav-list">
         <li>
-            <a href="dashboard.php">
-                <span>All Campus</span>
+            <a href="dashboard.php" class="<?php echo basename($_SERVER['PHP_SELF']) == 'dashboard.php' ? 'active' : ''; ?>">
+                <i class="fas fa-chart-bar"></i>
+                <span>JONELTA</span>
             </a>
         </li>
         <li>
             <a href="campuses/binan.php">
-                <span>Biñan</span>
+                <i class="fas fa-university"></i>
+                <span>BIÑAN</span>
             </a>
         </li>
         <li>
             <a href="campuses/gma_cavite.php">
-                <span>GMA Cavite</span>
+                <i class="fas fa-university"></i>
+                <span>GMA CAVITE</span>
             </a>
         </li>
         <li>
             <a href="campuses/manila.php">
-                <span>Manila</span>
+                <i class="fas fa-university"></i>
+                <span>MANILA</span>
             </a>
         </li>
         <li>
             <a href="campuses/pangasinan.php">
-                <span>Pangasinan</span>
+                <i class="fas fa-university"></i>
+                <span>PANGASINAN</span>
             </a>
         </li>
         <li>
             <a href="campuses/isabela.php">
-                <span>Isabela</span>
+                <i class="fas fa-university"></i>
+                <span>ISABELA</span>
             </a>
         </li>
         <li>
             <a href="campuses/roxas.php">
-                <span>Roxas</span>
+                <i class="fas fa-university"></i>
+                <span>ROXAS</span>
             </a>
         </li>
         <li>
             <a href="campuses/med-university.php">
-                <span>Medical University</span>
+                <i class="fas fa-university"></i>
+                <span>MEDICAL UNIVERSITY</span>
             </a>
         </li>
     </ul>
