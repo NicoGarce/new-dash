@@ -19,6 +19,53 @@ body {
     padding: 20px;
 }
 
+/* Responsive Design for Login */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 15px;
+    }
+    
+    .login-box {
+        padding: 30px 25px;
+    }
+    
+    .login-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .login-logo {
+        max-width: 100px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-container {
+        padding: 10px;
+    }
+    
+    .login-box {
+        padding: 25px 20px;
+    }
+    
+    .login-header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .login-logo {
+        max-width: 80px;
+    }
+    
+    .form-group input {
+        padding: 12px 15px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .login-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
+
 .login-box {
     background: white;
     border-radius: 15px;
@@ -31,10 +78,11 @@ body {
     margin-bottom: 30px;
 }
 
-.login-header i {
-    font-size: 3rem;
-    color: #204ca4;
+.login-logo {
+    max-width: 120px;
+    height: auto;
     margin-bottom: 15px;
+    object-fit: contain;
 }
 
 .login-header h1 {

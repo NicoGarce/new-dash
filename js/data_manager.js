@@ -15,6 +15,8 @@ class DataManager {
         
         // Initialize auto-refresh
         this.startAutoRefresh();
+        
+        // Sidebar toggle is now handled by the simple function below
     }
     
     /**
@@ -264,7 +266,99 @@ class DataManager {
     async refresh() {
         await this.updateDashboard();
     }
+    
+    /**
+     * Update main content padding based on sidebar state and screen size
+     */
+    updateMainContentPadding() {
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.querySelector('.main-content');
+        
+        if (sidebar && mainContent) {
+            // Desktop (992px+) - sidebar always visible
+            if (window.innerWidth >= 992) {
+                if (sidebar.classList.contains('collapsed')) {
+                    mainContent.style.paddingLeft = '60px';
+                } else {
+                    mainContent.style.paddingLeft = '150px';
+                }
+            } 
+            // Tablets and phones (991px and below) - sidebar hidden by default
+            else {
+                mainContent.style.paddingLeft = '0px';
+            }
+        }
+    }
+
+    /**
+     * Initialize sidebar state based on screen size
+     */
+    initializeSidebarState() {
+        // Sidebar state is now handled by CSS and initSimpleSidebarToggle()
+        // This method is kept for compatibility but does nothing
+    }
+
 }
 
-// Global data manager instance
-window.dataManager = new DataManager();
+// Simple sidebar toggle functionality
+function initSimpleSidebarToggle() {
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebarToggleDesktop = document.getElementById('sidebarToggleDesktop');
+    const sidebarClose = document.getElementById('sidebarClose');
+    const sidebar = document.getElementById('sidebar');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    
+    // Handle mobile/tablet toggle button
+    if (sidebarToggle && sidebar && sidebarOverlay) {
+        sidebarToggle.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('open');
+            sidebarOverlay.classList.toggle('open');
+        });
+    }
+    
+    // Handle desktop toggle button
+    if (sidebarToggleDesktop && sidebar && sidebarOverlay) {
+        sidebarToggleDesktop.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.toggle('collapsed');
+            // Update main content padding
+            if (window.dataManager) {
+                window.dataManager.updateMainContentPadding();
+            }
+        });
+    }
+    
+    // Handle sidebar overlay click (mobile/tablet)
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', function() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+        });
+    }
+    
+    // Handle sidebar close button
+    if (sidebarClose && sidebar && sidebarOverlay) {
+        sidebarClose.addEventListener('click', function(e) {
+            e.preventDefault();
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('open');
+        });
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initSimpleSidebarToggle);
+} else {
+    initSimpleSidebarToggle();
+}
+
+// Global data manager instance - create after DOM is loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        window.dataManager = new DataManager();
+    });
+} else {
+    window.dataManager = new DataManager();
+}

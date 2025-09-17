@@ -1,12 +1,30 @@
 <?php
 /**
- * Dashboard Template
- * This template can be used to generate dashboard pages with data from config
+ * Dashboard Template Generator
+ * 
+ * This template generates complete dashboard HTML pages with data from configuration.
+ * It provides a unified interface for creating both main dashboard and individual
+ * campus dashboard pages with proper responsive design and chart integration.
+ * 
+ * @author Dashboard System
+ * @version 1.0
+ * @since 2025-09-17
  */
 
+// Include helper functions
+require_once __DIR__ . '/helpers.php';
+
+/**
+ * Generate complete dashboard HTML
+ * 
+ * @param string $campusKey Campus identifier
+ * @param array $campusData Full campus data array
+ * @return string Generated HTML
+ */
 function generateDashboardHTML($campusKey, $campusData) {
     $campus = $campusData[$campusKey];
     $isAllCampuses = ($campusKey === 'all_campuses');
+    $user = getCurrentUser();
     
     ob_start();
     ?>
@@ -15,10 +33,10 @@ function generateDashboardHTML($campusKey, $campusData) {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title><?php echo htmlspecialchars($campus['name']); ?> Dashboard</title>
+        <title><?php echo sanitizeOutput($campus['name']); ?> Dashboard</title>
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="<?php echo $isAllCampuses ? 'js/data_manager.js' : '../js/data_manager.js'; ?>"></script>
-        <link rel="stylesheet" href="<?php echo $isAllCampuses ? 'css/style.css' : '../css/style.css'; ?>">
+        <script src="<?php echo getAssetPath('js/data_manager.js'); ?>"></script>
+        <link rel="stylesheet" href="<?php echo getAssetPath('css/style.css'); ?>">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500&display=swap" rel="stylesheet">
@@ -26,29 +44,29 @@ function generateDashboardHTML($campusKey, $campusData) {
     </head>
     <body>
         <?php 
+        // Include the dynamic sidebar component
         if ($isAllCampuses) {
-            include 'sidebar/dash_sidebar.php';
+            include __DIR__ . '/dynamic_sidebar.php';
         } else {
-            // For campus pages, use absolute path from project root
-            $sidebarPath = __DIR__ . '/../sidebar/sidebar.php';
-            if (file_exists($sidebarPath)) {
-                include $sidebarPath;
-            } else {
-                // Fallback to relative path
-                include '../sidebar/sidebar.php';
-            }
+            include __DIR__ . '/dynamic_sidebar.php';
         }
         ?>
         <div class="main-content">
             <div class="header-section">
-                <h1><?php echo htmlspecialchars($campus['name']); ?></h1>
+                <button class="sidebar-toggle" id="sidebarToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <button class="sidebar-toggle-desktop" id="sidebarToggleDesktop">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1><?php echo sanitizeOutput($campus['name']); ?></h1>
                 <div class="user-info">
-                    <span class="last-update">Last updated: <?php echo date('Y-m-d H:i:s'); ?></span>
+                    <span class="last-update">Last updated: <?php echo getCurrentTimestamp(); ?></span>
                     <button class="refresh-btn" onclick="dataManager.refresh()" title="Refresh Data">
                         <i class="fas fa-sync-alt"></i>
                     </button>
-                    <span>Welcome, <?php echo isset($_SESSION['username']) ? htmlspecialchars($_SESSION['username']) : 'User'; ?></span>
-                    <a href="<?php echo $isAllCampuses ? 'logout.php' : '../logout.php'; ?>" class="logout-btn">
+                    <span>Welcome, <?php echo sanitizeOutput($user['username']); ?></span>
+                    <a href="<?php echo getAssetPath('logout.php'); ?>" class="logout-btn">
                         <i class="fas fa-sign-out-alt"></i>
                         Logout
                     </a>
@@ -70,7 +88,7 @@ function generateDashboardHTML($campusKey, $campusData) {
                             <div class="big-number enrollment-current"><?php echo formatNumber($campus['enrollment']['current_year']); ?></div>
                         </div>
                         <div class="column-summary-card">
-                            <h4><?php echo $isAllCampuses ? 'SUMMARY PREV S.Y.' : 'SUMMARY PREV S.Y.'; ?></h4>
+                            <h4>SUMMARY PREV S.Y.</h4>
                             <h5><?php echo $isAllCampuses ? 'GRAND TOTAL ENROLLEES S.Y. 2024-2025' : 'NEW ENROLLEES SEPTEMBER S.Y. 2024-2025'; ?></h5>
                             <div class="big-number enrollment-previous"><?php echo formatNumber($campus['enrollment']['previous_year']); ?></div>
                             </div>

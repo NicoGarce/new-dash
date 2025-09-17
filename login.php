@@ -1,4 +1,17 @@
 <?php
+/**
+ * Login Page
+ * 
+ * This page handles user authentication for the dashboard system.
+ * It provides a secure login form with session management and
+ * redirects users to the appropriate dashboard after successful login.
+ * 
+ * @author Dashboard System
+ * @version 1.0
+ * @since 2025-09-17
+ */
+
+// Start session for authentication
 session_start();
 
 // Check if user is already logged in
@@ -7,20 +20,27 @@ if (isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Initialize error message
 $error_message = '';
 
-if ($_POST) {
+// Process login form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
     
-    // Simple authentication (in production, use proper password hashing and database)
-    if ($username === 'admin' && $password === 'admin123') {
-        $_SESSION['user_id'] = 1;
-        $_SESSION['username'] = $username;
-        header('Location: dashboard.php');
-        exit();
+    // Validate input
+    if (empty($username) || empty($password)) {
+        $error_message = 'Please enter both username and password';
     } else {
-        $error_message = 'Invalid username or password';
+        // Simple authentication (in production, use proper password hashing and database)
+        if ($username === 'admin' && $password === 'admin123') {
+            $_SESSION['user_id'] = 1;
+            $_SESSION['username'] = $username;
+            header('Location: dashboard.php');
+            exit();
+        } else {
+            $error_message = 'Invalid username or password';
+        }
     }
 }
 ?>
@@ -40,7 +60,7 @@ if ($_POST) {
     <div class="login-container">
         <div class="login-box">
             <div class="login-header">
-                <i class="fas fa-university"></i>
+                <img src="img/SS.png" alt="JONELTA Logo" class="login-logo">
                 <h1>Campus Dashboard</h1>
                 <p>Sign in to access the dashboard</p>
             </div>

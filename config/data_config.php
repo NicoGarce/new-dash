@@ -323,14 +323,6 @@ function getCampusData($campusKey) {
     return isset($campusData[$campusKey]) ? $campusData[$campusKey] : null;
 }
 
-function formatCurrency($amount) {
-    return '₱' . number_format($amount);
-}
-
-function formatNumber($number) {
-    return number_format($number);
-}
-
 function getCampusList() {
     global $campusData;
     return array_keys($campusData);

@@ -1,6 +1,6 @@
 # API Integration Guide
 
-This guide explains how to integrate external APIs with the Campus Dashboard System.
+This guide explains how to integrate external APIs with the enhanced Campus Dashboard System. The system now features improved error handling, caching, and a more robust data service layer.
 
 ## 🔌 Integration Overview
 
@@ -9,10 +9,12 @@ The dashboard system is designed to work with external APIs for real-time data. 
 ## 📁 Key Files for Integration
 
 ```
-includes/data_service.php    # Main data service layer
-api/get_data.php            # API endpoint for data fetching
-api/update_data.php         # API endpoint for data updates
-config/data_config.php      # Current sample data (replace with API calls)
+includes/data_service.php    # Enhanced data service layer with caching
+includes/helpers.php         # Utility functions for data formatting
+api/get_data.php            # Enhanced API endpoint with validation
+api/update_data.php         # Secure API endpoint with error handling
+config/data_config.php      # Centralized data configuration
+config/database.php         # Database configuration (ready for use)
 ```
 
 ## 🔧 Step-by-Step Integration
