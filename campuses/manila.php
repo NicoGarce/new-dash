@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for MANILA campus
-echo generateDashboardHTML('manila', $campusData);
+echo generateDashboardHTML('manila', $campusData['manila']);
 ?>

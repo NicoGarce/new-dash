@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for BIÑAN campus
-echo generateDashboardHTML('binan', $campusData);
+echo generateDashboardHTML('binan', $campusData['binan']);
 ?>

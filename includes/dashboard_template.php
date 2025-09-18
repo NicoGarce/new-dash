@@ -22,7 +22,13 @@ require_once __DIR__ . '/helpers.php';
  * @return string Generated HTML
  */
 function generateDashboardHTML($campusKey, $campusData) {
-    $campus = $campusData[$campusKey];
+    // If $campusData is already the specific campus data, use it directly
+    // Otherwise, extract the specific campus data from the full array
+    if (isset($campusData['enrollment']) && isset($campusData['collection']) && isset($campusData['accounts_payable'])) {
+        $campus = $campusData;
+    } else {
+        $campus = $campusData[$campusKey];
+    }
     $isAllCampuses = ($campusKey === 'all_campuses');
     $user = getCurrentUser();
     
@@ -162,6 +168,9 @@ function generateDashboardHTML($campusKey, $campusData) {
             const campusData = <?php echo json_encode($campus); ?>;
             const isAllCampuses = <?php echo $isAllCampuses ? 'true' : 'false'; ?>;
             const currentCampus = '<?php echo $campusKey; ?>';
+            
+            // Make currentCampus globally accessible for auto-refresh
+            window.currentCampus = currentCampus;
 
             // Enrollment Chart
             const enrollmentCtx = document.getElementById('enrollmentChart').getContext('2d');
@@ -341,13 +350,24 @@ function generateDashboardHTML($campusKey, $campusData) {
                 }
             });
 
-            // Register charts with data manager
-            dataManager.registerChart('enrollmentChart', enrollmentChart);
-            dataManager.registerChart('collectionChart', collectionChart);
-            dataManager.registerChart('accountsPayableChart', accountsPayableChart);
+            // Wait for data manager to be available, then register charts and initialize
+            function initializeDashboard() {
+                if (typeof dataManager !== 'undefined') {
+                    // Register charts with data manager
+                    dataManager.registerChart('enrollmentChart', enrollmentChart);
+                    dataManager.registerChart('collectionChart', collectionChart);
+                    dataManager.registerChart('accountsPayableChart', accountsPayableChart);
 
-            // Initialize data manager for current campus
-            dataManager.updateDashboard(currentCampus);
+                    // Initialize data manager - let it detect campus from URL
+                    dataManager.updateDashboard();
+                } else {
+                    // Retry after a short delay
+                    setTimeout(initializeDashboard, 100);
+                }
+            }
+            
+            // Start initialization
+            initializeDashboard();
         </script>
     </body>
     </html>

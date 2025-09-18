@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for GMA CAVITE campus
-echo generateDashboardHTML('gma_cavite', $campusData);
+echo generateDashboardHTML('gma_cavite', $campusData['gma_cavite']);
 ?>

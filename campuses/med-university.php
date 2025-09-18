@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for MEDICAL UNIVERSITY campus
-echo generateDashboardHTML('med-university', $campusData);
+echo generateDashboardHTML('med-university', $campusData['med-university']);
 ?>

@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for PANGASINAN campus
-echo generateDashboardHTML('pangasinan', $campusData);
+echo generateDashboardHTML('pangasinan', $campusData['pangasinan']);
 ?>

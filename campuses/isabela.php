@@ -25,5 +25,5 @@ require_once '../config/data_config.php';
 require_once '../includes/dashboard_template.php';
 
 // Generate dashboard HTML for ISABELA campus
-echo generateDashboardHTML('isabela', $campusData);
+echo generateDashboardHTML('isabela', $campusData['isabela']);
 ?>

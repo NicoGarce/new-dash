@@ -41,7 +41,6 @@ class DataManager {
             this.lastUpdate = data.timestamp;
             return data;
         } catch (error) {
-            console.error('Error fetching data:', error);
             this.showError('Failed to fetch data. Please check your connection.');
             return null;
         }
@@ -50,8 +49,13 @@ class DataManager {
     /**
      * Update dashboard with new data
      */
-    async updateDashboard(campus = 'all_campuses') {
+    async updateDashboard(campus = null) {
         if (this.isRefreshing) return;
+        
+        // If no campus specified, detect it dynamically
+        if (!campus) {
+            campus = this.getCurrentCampus();
+        }
         
         this.isRefreshing = true;
         this.showLoading(true);
@@ -64,7 +68,7 @@ class DataManager {
                 this.updateLastUpdateTime(data.timestamp);
             }
         } catch (error) {
-            console.error('Error updating dashboard:', error);
+            // Silent fail
         } finally {
             this.isRefreshing = false;
             this.showLoading(false);
@@ -97,6 +101,10 @@ class DataManager {
     updateEnrollmentChart(data) {
         const chart = this.charts.enrollmentChart;
         
+        if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
+            return;
+        }
+        
         if (data.per_campus) {
             // All campuses view
             chart.data.labels = Object.keys(data.per_campus);
@@ -111,7 +119,11 @@ class DataManager {
             chart.data.datasets[0].data = data.per_sy;
         }
         
-        chart.update('active');
+        try {
+            chart.update('none');
+        } catch (error) {
+            // Silent fail
+        }
     }
     
     /**
@@ -119,6 +131,10 @@ class DataManager {
      */
     updateCollectionChart(data) {
         const chart = this.charts.collectionChart;
+        
+        if (!chart || !chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
+            return;
+        }
         
         if (data.per_campus) {
             // All campuses view
@@ -130,7 +146,11 @@ class DataManager {
             chart.data.datasets[0].data = data.monthly;
         }
         
-        chart.update('active');
+        try {
+            chart.update('none');
+        } catch (error) {
+            // Silent fail
+        }
     }
     
     /**
@@ -139,17 +159,56 @@ class DataManager {
     updateAccountsPayableChart(data) {
         const chart = this.charts.accountsPayableChart;
         
-        if (data.per_campus) {
-            // All campuses view
-            chart.data.labels = Object.keys(data.per_campus);
-            chart.data.datasets[0].data = Object.values(data.per_campus);
-        } else if (data.by_category) {
-            // Individual campus view
-            chart.data.labels = Object.keys(data.by_category);
-            chart.data.datasets[0].data = Object.values(data.by_category);
+        if (!chart) {
+            return;
         }
         
-        chart.update('active');
+        // Validate chart structure
+        if (!chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
+            return;
+        }
+        
+        let labels = [];
+        let values = [];
+        
+        if (data.per_campus) {
+            // All campuses view
+            labels = Object.keys(data.per_campus);
+            values = Object.values(data.per_campus);
+        } else if (data.by_category) {
+            // Individual campus view
+            labels = Object.keys(data.by_category);
+            values = Object.values(data.by_category);
+        } else {
+            return;
+        }
+        
+        // Validate data
+        if (labels.length === 0 || values.length === 0 || labels.length !== values.length) {
+            return;
+        }
+        
+        // Ensure all values are numbers
+        const numericValues = values.map(val => {
+            const num = parseFloat(val);
+            return isNaN(num) ? 0 : num;
+        });
+        
+        // Update chart data
+        chart.data.labels = labels;
+        chart.data.datasets[0].data = numericValues;
+        
+        try {
+            chart.update('none'); // Use 'none' instead of 'active' to avoid animation issues
+        } catch (error) {
+            // Try to reinitialize the chart if update fails
+            try {
+                chart.destroy();
+                this.charts.accountsPayableChart = null;
+            } catch (destroyError) {
+                // Silent fail
+            }
+        }
     }
     
     /**
@@ -240,8 +299,41 @@ class DataManager {
      */
     startAutoRefresh() {
         setInterval(() => {
-            this.updateDashboard();
+            this.updateDashboard(); // This will auto-detect the campus
         }, this.refreshInterval);
+    }
+    
+    /**
+     * Get current campus from URL or window variable
+     */
+    getCurrentCampus() {
+        const path = window.location.pathname;
+        
+        // ALWAYS prioritize URL detection over window.currentCampus
+        // Check if we're on a campus page
+        if (path.includes('/campuses/')) {
+            const campusMatch = path.match(/\/campuses\/([^\/]+)\.php/);
+            if (campusMatch) {
+                const detectedCampus = campusMatch[1];
+                // Always update window.currentCampus to match URL
+                window.currentCampus = detectedCampus;
+                return detectedCampus;
+            }
+        }
+        
+        // Check if we're on the main dashboard
+        if (path.endsWith('/dashboard.php') || path.endsWith('/index.php') || path === '/' || path.endsWith('/')) {
+            window.currentCampus = 'all_campuses';
+            return 'all_campuses';
+        }
+        
+        // Only use window variable if URL detection completely fails
+        if (window.currentCampus) {
+            return window.currentCampus;
+        }
+        
+        // Default
+        return 'all_campuses';
     }
     
     /**
@@ -264,7 +356,7 @@ class DataManager {
      * Manual refresh
      */
     async refresh() {
-        await this.updateDashboard();
+        await this.updateDashboard(); // This will auto-detect the campus
     }
     
     /**
