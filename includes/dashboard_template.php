@@ -126,22 +126,22 @@ function generateDashboardHTML($campusKey, $campusData) {
                     </div>
                 </div>
 
-                <!-- Accounts Payable Column -->
+                <!-- ACCOUNTS RECEIVABLE Column -->
                 <div class="column">
                     <div class="column-header">
-                        <h3>ACCOUNTS PAYABLE</h3>
+                        <h3>ACCOUNTS RECEIVABLE</h3>
                     </div>
                     <div class="column-content">
                         <div class="column-summary">
                             <div class="column-summary-card">
-                                <h4>ACCOUNTS PAYABLE SUMMARY</h4>
-                                <h5>TOTAL OUTSTANDING PAYABLES S.Y. 2025-2026</h5>
-                            <div class="big-number payables-current"><?php echo formatCurrency($campus['accounts_payable']['current_year']); ?></div>
+                                <h4>ACCOUNTS RECEIVABLE SUMMARY</h4>
+                                <h5>TOTAL OUTSTANDING RECEIVABLES S.Y. 2025-2026</h5>
+                            <div class="big-number receivables-current"><?php echo formatCurrency($campus['accounts_payable']['current_year']); ?></div>
                         </div>
                         <div class="column-summary-card">
-                            <h4>PAYABLES PREV S.Y.</h4>
-                            <h5>TOTAL OUTSTANDING PAYABLES S.Y. 2024-2025</h5>
-                            <div class="big-number payables-previous"><?php echo formatCurrency($campus['accounts_payable']['previous_year']); ?></div>
+                            <h4>RECEIVABLES PREV S.Y.</h4>
+                            <h5>TOTAL OUTSTANDING RECEIVABLES S.Y. 2024-2025</h5>
+                            <div class="big-number receivables-previous"><?php echo formatCurrency($campus['accounts_payable']['previous_year']); ?></div>
                             </div>
                         </div>
                         <div class="column-chart">
@@ -288,14 +288,14 @@ function generateDashboardHTML($campusKey, $campusData) {
                 }
             });
 
-            // Accounts Payable Chart
+            // ACCOUNTS RECEIVABLE Chart
             const accountsPayableCtx = document.getElementById('accountsPayableChart').getContext('2d');
             const accountsPayableChart = new Chart(accountsPayableCtx, {
                 type: <?php echo $isAllCampuses ? "'bar'" : "'doughnut'"; ?>,
                 data: {
                     labels: <?php echo $isAllCampuses ? json_encode(array_keys($campus['accounts_payable']['per_campus'])) : json_encode(array_keys($campus['accounts_payable']['by_category'])); ?>,
                     datasets: [{
-                        label: 'Outstanding Payables (₱)',
+                        label: 'Outstanding RECEIVABLES (₱)',
                         data: <?php echo $isAllCampuses ? json_encode(array_values($campus['accounts_payable']['per_campus'])) : json_encode(array_values($campus['accounts_payable']['by_category'])); ?>,
                         backgroundColor: <?php echo $isAllCampuses ? "'#204ca4'" : json_encode(['#204ca4', '#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe', '#dbeafe']); ?>,
                         borderColor: <?php echo $isAllCampuses ? "'#204ca4'" : 'null'; ?>,

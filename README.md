@@ -1,6 +1,6 @@
 # Campus Dashboard System
 
-A modern, responsive dashboard system for managing campus data including enrollment, collection, and accounts payable information across multiple campuses. Built with clean, maintainable code and comprehensive documentation.
+A modern, responsive dashboard system for managing campus data including enrollment, collection, and accounts receivable information across multiple campuses. Built with clean, maintainable code and comprehensive documentation.
 
 ## ✨ Key Features
 
@@ -99,7 +99,7 @@ The system currently uses `config/data_config.php` for sample data. This file co
 - Campus information
 - Enrollment data (current/previous year)
 - Collection data (financial information)
-- Accounts payable data
+- Accounts receivable data
 
 ### API Integration Structure
 
@@ -223,7 +223,7 @@ Your APIs should return data in this format:
 }
 ```
 
-#### Accounts Payable Data
+#### Accounts Receivable Data
 ```json
 {
     "current_year": 456789000,

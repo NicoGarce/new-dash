@@ -3,7 +3,7 @@
  * Main Dashboard
  * 
  * This is the main dashboard page that displays aggregated data for all campuses.
- * It provides an overview of enrollment, collection, and accounts payable
+ * It provides an overview of enrollment, collection, and accounts receivable
  * across the entire university system.
  * 
  * @author Dashboard System
