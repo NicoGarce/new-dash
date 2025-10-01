@@ -139,10 +139,10 @@ class DataService {
     }
     
     /**
-     * Get accounts payable data for a specific campus
+     * Get accounts receivable data for a specific campus
      * 
      * @param string $campus Campus identifier
-     * @return array Accounts payable data
+     * @return array Accounts receivable data
      */
     public function getAccountsPayableData($campus) {
         // Check cache first

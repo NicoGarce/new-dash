@@ -4,7 +4,7 @@
  * 
  * This API handles real-time data updates for the dashboard system.
  * It provides a secure interface for updating campus data including
- * enrollment, collection, and accounts payable information.
+ * enrollment, collection, and accounts receivable information.
  * 
  * @author Dashboard System
  * @version 1.0

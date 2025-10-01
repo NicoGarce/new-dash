@@ -114,7 +114,7 @@ if ($_POST) {
                     <option value="">Select Data Type</option>
                     <option value="enrollment">Enrollment</option>
                     <option value="collection">Collection</option>
-                    <option value="accounts_payable">Accounts Payable</option>
+                    <option value="accounts_payable">Accounts Receivable</option>
                 </select>
             </div>
             

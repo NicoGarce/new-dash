@@ -89,7 +89,7 @@ class DataManager {
             this.updateCollectionChart(data.collection);
         }
         
-        // Update accounts payable chart
+        // Update accounts receivable chart
         if (data.accounts_payable && this.charts.accountsPayableChart) {
             this.updateAccountsPayableChart(data.accounts_payable);
         }
@@ -154,7 +154,7 @@ class DataManager {
     }
     
     /**
-     * Update accounts payable chart
+     * Update accounts receivable chart
      */
     updateAccountsPayableChart(data) {
         const chart = this.charts.accountsPayableChart;
@@ -227,10 +227,10 @@ class DataManager {
             this.updateElement('.collection-previous', this.formatCurrency(data.collection.previous_year));
         }
         
-        // Update accounts payable summary
+        // Update accounts receivable summary
         if (data.accounts_payable) {
-            this.updateElement('.payables-current', this.formatCurrency(data.accounts_payable.current_year));
-            this.updateElement('.payables-previous', this.formatCurrency(data.accounts_payable.previous_year));
+            this.updateElement('.receivables-current', this.formatCurrency(data.accounts_payable.current_year));
+            this.updateElement('.receivables-previous', this.formatCurrency(data.accounts_payable.previous_year));
         }
     }
     

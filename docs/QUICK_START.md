@@ -79,7 +79,7 @@ The system uses `config/data_config.php` for sample data. This file contains:
 - Campus information
 - Enrollment data
 - Collection data  
-- Accounts payable data
+- Accounts receivable data
 
 ### API Integration
 To connect to your APIs:

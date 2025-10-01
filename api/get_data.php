@@ -4,7 +4,7 @@
  * 
  * This API provides JSON data for dashboard updates. It serves as the main
  * data source for the dashboard system, handling requests for enrollment,
- * collection, and accounts payable data across all campuses.
+ * collection, and accounts receivable data across all campuses.
  * 
  * @author Dashboard System
  * @version 1.0

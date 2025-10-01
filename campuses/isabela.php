@@ -3,7 +3,7 @@
  * ISABELA Campus Dashboard
  * 
  * This page displays the dashboard for the ISABELA campus with enrollment,
- * collection, and accounts payable data. It uses the dashboard template
+ * collection, and accounts receivable data. It uses the dashboard template
  * system for consistent layout and functionality.
  * 
  * @author Dashboard System
